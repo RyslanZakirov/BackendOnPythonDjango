@@ -31,6 +31,7 @@ def definePathToStorePhoto(instance, filename):
     else:
         return 'tempFilesForPhoto'
 
+
 class OwnUser(AbstractBaseUser, PermissionsMixin):
 
     userId = models.AutoField(primary_key=True)
@@ -73,9 +74,9 @@ class Point(models.Model):
     name = models.CharField(max_length=255)
     description = models.CharField(max_length=2000)
     rating = models.FloatField(null=True, blank=True, default=None)
-    instagram = models.CharField(max_length=255)
-    vk = models.CharField(max_length=255)
-    telegram = models.CharField(max_length=255)
+    instagram = models.CharField(max_length=255, blank=True)
+    vk = models.CharField(max_length=255, blank=True)
+    telegram = models.CharField(max_length=255, blank=True)
     isVisible = models.BooleanField(default=True)
 
     class Meta:
@@ -92,3 +93,28 @@ class Guest(models.Model):
     class Meta:
         verbose_name = "Гость"
         verbose_name_plural = "Гости"
+
+
+class Tag(models.Model):
+
+    tagId = models.AutoField(primary_key=True)
+    tagName = models.CharField(max_length=255)
+    pointId = models.ForeignKey(Point, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.tagName
+
+    class Meta:
+        verbose_name = "Тег"
+        verbose_name_plural = "Теги"
+
+
+class Photo(models.Model):
+
+    photoId = models.AutoField(primary_key=True)
+    photo = models.ImageField(upload_to=definePathToStorePhoto)
+    pointId = models.ForeignKey(Point, on_delete=models.CASCADE)
+
+    class Meta:
+        verbose_name = "Фотография"
+        verbose_name_plural = "Фотографии"

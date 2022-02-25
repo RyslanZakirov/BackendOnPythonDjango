@@ -64,7 +64,7 @@ class OwnUser(AbstractBaseUser, PermissionsMixin):
 class Point(models.Model):
 
     pointId = models.AutoField(primary_key=True)
-    timeCreation = models.DateField(auto_now_add=True)
+    timeCreation = models.DateTimeField(auto_now_add=True)
     timeDuration = models.DateField()
     latitude = models.FloatField(null=True, blank=True, default=None)
     longitude = models.FloatField(null=True, blank=True, default=None)
@@ -118,3 +118,29 @@ class Photo(models.Model):
     class Meta:
         verbose_name = "Фотография"
         verbose_name_plural = "Фотографии"
+
+
+class PointMessage(models.Model):
+
+    pointMessageId = models.AutoField(primary_key=True)
+    userId = models.ForeignKey(OwnUser, on_delete=models.CASCADE)   #или использовать DO_NOTHING?
+    pointId = models.ForeignKey(Point, on_delete=models.CASCADE)
+    pointMessageDate = models.DateTimeField(auto_now_add=True)
+    pointMessageContent = models.TextField(max_length=400)
+
+    class Meta:
+        verbose_name = 'СообщениеОМероприятия'
+        verbose_name_plural = 'СообщенияОМероприятия'
+
+
+class UserMessage(models.Model):
+
+    userMessageId = models.AutoField(primary_key=True)
+    senderId = models.ForeignKey(OwnUser, related_name='sender', on_delete=models.CASCADE) #или использовать DO_NOTHING?
+    receiverId = models.ForeignKey(OwnUser, related_name='receiver', on_delete=models.CASCADE)
+    userMessageDate = models.DateTimeField(auto_now_add=True)
+    userMessageContent = models.TextField(max_length=400)
+
+    class Meta:
+        verbose_name = 'СообщениеПользователю'
+        verbose_name_plural = 'СообщенияПользователю'

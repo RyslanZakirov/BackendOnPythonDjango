@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 
-from .models import OwnUser, Guest, Point, Tag, Photo
+from .models import OwnUser, Guest, Point, Tag, Photo, PointMessage, UserMessage
 
 class CustomerOwnUser(UserAdmin):
 
@@ -72,3 +72,23 @@ class CustomerPhoto(admin.ModelAdmin):
     list_display_links = ('pointId',)
 
 admin.site.register(Photo, CustomerPhoto)
+
+
+class CustomerPointMessage(admin.ModelAdmin):
+
+    list_display = ('pointMessageId', 'userId', 'pointId', 'pointMessageDate')
+    list_display_links = ('pointMessageId',)
+
+    ordering = ('pointMessageDate',)
+
+admin.site.register(PointMessage, CustomerPointMessage)
+
+
+class CustomerUserMessage(admin.ModelAdmin):
+
+    list_display = ('userMessageId', 'senderId', 'receiverId', 'userMessageDate')
+    list_display_links = ('userMessageId',)
+
+    ordering = ('userMessageDate',)
+
+admin.site.register(UserMessage, CustomerUserMessage)
